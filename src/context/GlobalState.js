@@ -5,12 +5,8 @@ import AppReducer from './AppReducer';
 
 // Initial State
 const initialState = {
-    transactions: [
-        { id: 1, text: 'Flower', amount: -20 },
-        { id: 2, text: 'Salary', amount: 300 },
-        { id: 3, text: 'Book', amount: -10 },
-        { id: 4, text: 'Camera', amount: 150 }
-    ]
+    // Global var of transactions
+    transactions: []
 }
 
 // Create Context - Pass in Initial State
@@ -21,9 +17,30 @@ export const GlobalProvider = ({ children }) => {
     // Use Reducer Hook
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
-    return (<GlobalContext.Provider value={{
+    // Action to Delete based on ID
+    function deleteTransaction(id){
+        // from useReducer
+        dispatch({
+            type: 'DELETE_TRANSACTION',
+            payload: id
+        })
+    }
+
+    // Action to Add based on ID
+    function addTransaction(transaction){
+        // from useReducer
+        dispatch({
+            type: 'ADD_TRANSACTION',
+            payload: transaction
+        })
+    }
+
+    return (
+    <GlobalContext.Provider value={{
         // Access Transactions from any component using Use Context
-        transactions: state.transactions
+        transactions: state.transactions,
+        deleteTransaction,
+        addTransaction
     }}>
         {children}
     </GlobalContext.Provider>);
